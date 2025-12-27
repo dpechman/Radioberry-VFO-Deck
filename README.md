@@ -14,9 +14,10 @@ A comunicação com o software de rádio é feita via **USB MIDI**, permitindo c
 
 - Fornecer uma interface física dedicada para sintonia (VFO)
 - Exibir a frequência atual em destaque
-- Controlar funções do rádio usando encoders e botões
+- Expandir os botões de controle da Radioberry através de multiplas telas com grupos de botões virtuais
+- Controlar funções do rádio usando encoders e botões físicos
 - Reduzir dependência de mouse e teclado
-- Operar de forma independente da interface gráfica principal
+- Operar de forma independente e complementar com a interface gráfica principal
 
 ---
 
