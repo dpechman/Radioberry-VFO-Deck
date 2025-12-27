@@ -2,6 +2,10 @@
 
 O **Radioberry VFO Deck** é um display auxiliar dedicado à sintonia e controle de rádios SDR baseados em Radioberry, utilizando um microcontrolador **Raspberry Pi Pico** com display, encoders e botões físicos.
 
+<p align="center">
+  <img src="vfodeck.jpg" width="1024">
+</p>
+
 A comunicação com o software de rádio é feita via **USB MIDI**, permitindo controle e visualização de estado em **piHPSDR**, **DeskHPSDR** e outros softwares compatíveis, com integração através de **TCI → MIDI**.
 
 ---
