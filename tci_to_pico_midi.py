@@ -23,20 +23,20 @@ DEBUG = os.environ.get("DEBUG", "0") == "1"
 SYSEX_MFR = 0x7D
 SYSEX_CMD_FREQ = 0x01
 
-# Heurísticas pra achar frequência nas mensagens TCI
-# Exemplos comuns no ecossistema TCI: "VFO:0,14074000;" etc.
+# Heuristics to find frequency in TCI messages
+# Common examples in TCI ecosystem: "VFO:0,14074000;" etc.
 RE_VFO = re.compile(r"(?i)\bVFO\s*:\s*(\d+)\s*,\s*(\d+)\s*;")
-RE_ANY_HZ = re.compile(r"(\d{4,})")  # pega inteiros >= 4 dígitos
+RE_ANY_HZ = re.compile(r"(\d{4,})")  # captures integers >= 4 digits
 
 def pick_midi_out():
     outs = mido.get_output_names()
     if not outs:
-        raise RuntimeError("Nenhuma saída MIDI encontrada. Confere se a Pico está enumerada como USB-MIDI.")
-    # tenta por nome
+        raise RuntimeError("No MIDI output found. Check if the Pico is enumerated as USB-MIDI.")
+    # try by name
     for name in outs:
         if MIDI_OUT_NAME_HINT.lower() in name.lower():
             return name
-    # fallback: primeira
+    # fallback: first
     return outs[0]
 
 def build_sysex_freq(vfo_id: int, freq_hz: int):
@@ -59,17 +59,17 @@ def parse_freq_from_tci(msg: str):
         hz = int(m.group(2))
         return vfo_id, hz
 
-    # 2) fallback: tenta achar um número que pareça frequência em Hz
-    # (ex: 7074000, 145500000 etc). Pega o maior número plausível.
+    # 2) fallback: try to find a number that looks like frequency in Hz
+    # (e.g.: 7074000, 145500000 etc). Takes the largest plausible number.
     nums = [int(x) for x in RE_ANY_HZ.findall(msg)]
     if not nums:
         return None
-    # escolhe candidato plausível (1 kHz .. 10 GHz)
+    # choose plausible candidate (1 kHz .. 10 GHz)
     candidates = [n for n in nums if 1_000 <= n <= 10_000_000_000]
     if not candidates:
         return None
     hz = max(candidates)
-    return 0, hz  # vfo_id desconhecido
+    return 0, hz  # vfo_id unknown
 
 async def main():
     midi_name = pick_midi_out()
@@ -83,11 +83,11 @@ async def main():
 
     with mido.open_output(midi_name) as midi_out:
         async with websockets.connect(TCI_URL, ping_interval=20, ping_timeout=20) as ws:
-            # Alguns servers TCI mandam estado inicial automaticamente ao conectar. :contentReference[oaicite:1]{index=1}
+            # Some TCI servers send initial state automatically when connecting.
             while True:
                 raw = await ws.recv()
                 if not isinstance(raw, str):
-                    # ignora binário (áudio/IQ etc)
+                    # ignore binary (audio/IQ etc)
                     continue
 
                 if DEBUG:

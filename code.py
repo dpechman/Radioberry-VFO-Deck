@@ -1,6 +1,6 @@
 # code.py - ILI9341 + XPT2046 + MIDI KEY + 5 encoders
-# Telas agrupadas por função, filtros nas primeiras telas
-# Botões com label em 1 ou 2 linhas
+# Screens grouped by function, filters on the first screens
+# Buttons with label in 1 or 2 lines
 
 import time
 import board
@@ -21,7 +21,7 @@ from adafruit_midi.note_off import NoteOff
 from adafruit_midi.control_change import ControlChange
 
 # ============================================================
-# TOUCH DRIVER XPT2046 (com SPI lock)
+# TOUCH DRIVER XPT2046 (with SPI lock)
 # ============================================================
 
 class Touch:
@@ -141,12 +141,12 @@ reverse4 = -1
 reverse5 = -1
 
 # ============================================================
-# PÁGINAS (10 telas) – FILTROS nas primeiras telas
-# campo "cc" é o número da NOTA MIDI
+# PAGES (10 screens) – FILTERS on the first screens
+# "cc" field is the MIDI NOTE number
 # ============================================================
 
 PAGES = [
-    # 0 - Menus / Função extra
+    # 0 - Menus / Extra function
     {
         "title": "0 - MENUS / EXTRA",
         "buttons": [
@@ -159,9 +159,9 @@ PAGES = [
         ],
     },
 
-    # 1 - Filtros básicos / AGC
+    # 1 - Basic filters / AGC
     {
-        "title": "1 - FILTROS 1",
+        "title": "1 - FILTERS 1",
         "buttons": [
             {"label": "AGC",               "cc": 21},
             {"label": "AGC Menu",          "cc": 22},
@@ -172,9 +172,9 @@ PAGES = [
         ],
     },
 
-    # 2 - Filtros avançados
+    # 2 - Advanced filters
     {
-        "title": "2 - FILTROS 2",
+        "title": "2 - FILTERS 2",
         "buttons": [
             {"label": "Filter -",           "cc": 31},
             {"label": "Filter +",           "cc": 32},
@@ -185,9 +185,9 @@ PAGES = [
         ],
     },
 
-    # 3 - Bandas HF principais
+    # 3 - Main HF bands
     {
-        "title": "3 - BANDAS HF 1",
+        "title": "3 - HF BANDS 1",
         "buttons": [
             {"label": "6m",    "cc": 41},
             {"label": "10m",   "cc": 42},
@@ -198,9 +198,9 @@ PAGES = [
         ],
     },
 
-    # 4 - Bandas HF 2
+    # 4 - HF bands 2
     {
-        "title": "4 - BANDAS HF 2",
+        "title": "4 - HF BANDS 2",
         "buttons": [
             {"label": "30m",   "cc": 47},
             {"label": "40m",   "cc": 48},
@@ -250,7 +250,7 @@ PAGES = [
         ],
     },
 
-    # 8 - TX / Áudio / Compressor
+    # 8 - TX / Audio / Compressor
     {
         "title": "8 - TX / AUDIO",
         "buttons": [
@@ -267,8 +267,8 @@ PAGES = [
 NUM_PAGES = len(PAGES)
 
 # ============================================================
-# CALIBRAÇÃO FIXA (8 pontos)
-# (ajuste depois conforme o layout real)
+# FIXED CALIBRATION (8 points)
+# (adjust later according to the real layout)
 # ============================================================
 
 calibration_points = [
@@ -310,7 +310,7 @@ class TouchButton:
         self.rect=RoundRect(x,y,w,h,r=r,fill=color,outline=0x202020,stroke=2)
         group.append(self.rect)
 
-        # ----- label em 1 ou 2 linhas -----
+        # ----- label in 1 or 2 lines -----
         parts = text.split(" ")
 
         labels = []
@@ -358,7 +358,7 @@ class TouchButton:
             labels.extend([lbl1, lbl2])
 
         else:
-            # 4+ palavras → divide meio a meio
+            # 4+ words → split in half
             mid = len(parts) // 2
             line1 = " ".join(parts[:mid])
             line2 = " ".join(parts[mid:])
@@ -390,7 +390,7 @@ def create_page_ui(idx_page):
 
     cfg = PAGES[idx_page]["buttons"]
 
-    # ----- título -----
+    # ----- title -----
     title_label = label.Label(
         terminalio.FONT,
         text=PAGES[idx_page]["title"],
@@ -401,7 +401,7 @@ def create_page_ui(idx_page):
     title_label.anchored_position = (DISPLAY_WIDTH // 2, 2)
     group.append(title_label)
 
-    title_h = 28  # altura reservada para o título
+    title_h = 28  # height reserved for title
 
     nav_w=40
     gap=6
@@ -467,7 +467,7 @@ display.show(ui)
 active=None
 touch_down=False
 
-print("MIDI Touch Controller + Encoders – filtros primeiro")
+print("MIDI Touch Controller + Encoders – filters first")
 
 while True:
     # ----- TOUCH -----
@@ -508,7 +508,7 @@ while True:
                 active = None
             touch_down = False
 
-    # ----- ENCODERS (ControlChange como no código original) -----
+    # ----- ENCODERS (ControlChange as in original code) -----
 
     pos1 = encoder1.position
     if pos1 != last_position1:

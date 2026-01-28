@@ -1,27 +1,27 @@
 # Radioberry VFO Deck
 
-O **Radioberry VFO Deck** é um display auxiliar dedicado à sintonia e controle de rádios SDR baseados em Radioberry, utilizando um microcontrolador **Raspberry Pi Pico** com display, encoders e botões físicos.
+The **Radioberry VFO Deck** is a dedicated auxiliary display for tuning and controlling Radioberry-based SDR radios, using a **Raspberry Pi Pico** microcontroller with display, encoders, and physical buttons.
 
 <p align="center">
   <img src="vfodeck.jpg" width="1024">
 </p>
 
-A comunicação com o software de rádio é feita via **USB MIDI**, permitindo controle e visualização de estado em **piHPSDR**, **DeskHPSDR** e outros softwares compatíveis, com integração através de **TCI → MIDI**.
+Communication with the radio software is done via **USB MIDI**, allowing control and status visualization in **piHPSDR**, **DeskHPSDR**, and other compatible software, with integration through **TCI → MIDI**.
 
 ---
 
-## Objetivo
+## Objective
 
-- Fornecer uma interface física dedicada para sintonia (VFO)
-- Exibir a frequência atual em destaque
-- Expandir os botões de controle da Radioberry através de multiplas telas com grupos de botões virtuais
-- Controlar funções do rádio usando encoders e botões físicos
-- Reduzir dependência de mouse e teclado
-- Operar de forma independente e complementar com a interface gráfica principal
+- Provide a dedicated physical interface for tuning (VFO)
+- Display the current frequency prominently
+- Expand Radioberry control buttons through multiple screens with virtual button groups
+- Control radio functions using encoders and physical buttons
+- Reduce dependency on mouse and keyboard
+- Operate independently and complementarily with the main graphical interface
 
 ---
 
-## Arquitetura Geral
+## General Architecture
 
 
 
@@ -29,34 +29,34 @@ Radioberry
 ↑
 piHPSDR / DeskHPSDR (TCI)
 ↑
-Bridge no PC (TCI → MIDI)
+Bridge on PC (TCI → MIDI)
 ↑
 Raspberry Pi Pico (USB MIDI)
 ↑
-Display + Encoders + Botões
+Display + Encoders + Buttons
 
 
-- O estado do rádio é obtido via **TCI**
-- A Pico não acessa TCI diretamente
-- Um bridge no PC converte eventos TCI em mensagens MIDI
+- Radio status is obtained via **TCI**
+- The Pico does not access TCI directly
+- A bridge on the PC converts TCI events into MIDI messages
 
 ---
 
-## Tela 0 – Sintonia
+## Screen 0 – Tuning
 
-A tela principal do sistema é dedicada à sintonia.
+The main system screen is dedicated to tuning.
 
-### Informações exibidas
-- Frequência atual (Hz)
-- VFO ativo (A / B)
-- Modo de operação
-- STEP de sintonia
+### Displayed Information
+- Current frequency (Hz)
+- Active VFO (A / B)
+- Operating mode
+- Tuning STEP
 - RIT / XIT
-- Estado de TX / RX
-- Indicadores de bloqueio e split
-- (Opcional) nível de sinal
+- TX / RX status
+- Lock and split indicators
+- (Optional) signal level
 
-### Controles na tela
+### On-Screen Controls
 - BAND − / BAND +
 - MODE
 - FILTER
@@ -69,43 +69,43 @@ A tela principal do sistema é dedicada à sintonia.
 
 ---
 
-## Entradas Físicas
+## Physical Inputs
 
 ### Encoders
-- **Encoder 1**: Sintonia do VFO  
-  - Push: alterna VFO A/B
-- **Encoder 2**: STEP de sintonia
-- **Encoder 3**: Filtro
-- **Encoder 4**: Navegação / Menu
-- **Encoder 5**: Função configurável (AF / RF / SQL)
+- **Encoder 1**: VFO tuning  
+  - Push: toggle VFO A/B
+- **Encoder 2**: Tuning STEP
+- **Encoder 3**: Filter
+- **Encoder 4**: Navigation / Menu
+- **Encoder 5**: Configurable function (AF / RF / SQL)
 
-### Botões
+### Buttons
 - MODE
 - BAND +
 - BAND −
 - A/B
 - STEP
 - LOCK
-- PTT (opcional)
+- PTT (optional)
 
 ---
 
-## Comunicação MIDI
+## MIDI Communication
 
 ### Pico → PC (MIDI OUT)
 - Encoders: Control Change (CC)
-- Botões: Note ou CC
+- Buttons: Note or CC
 
 ### PC → Pico (MIDI IN)
-- SysEx para atualização de estado:
-  - Frequência
-  - VFO ativo
-  - Modo
+- SysEx for status update:
+  - Frequency
+  - Active VFO
+  - Mode
   - STEP
   - PTT
-  - Estados auxiliares
+  - Auxiliary states
 
-### Formato SysEx (proposto)
+### SysEx Format (proposed)
 
 
 F0 7D <CMD> <DATA...> F7
@@ -113,23 +113,23 @@ F0 7D <CMD> <DATA...> F7
 
 ---
 
-## Estado do Projeto
+## Project Status
 
-- [x] Estrutura base do firmware
-- [x] Leitura de encoders e botões
-- [x] Navegação por páginas
-- [ ] Implementação da Tela 0 (Sintonia)
-- [ ] Recepção MIDI (SysEx)
-- [ ] Bridge TCI → MIDI
-- [ ] Integração completa com piHPSDR / DeskHPSDR
+- [x] Base firmware structure
+- [x] Encoder and button reading
+- [x] Page navigation
+- [ ] Screen 0 implementation (Tuning)
+- [ ] MIDI reception (SysEx)
+- [ ] TCI → MIDI bridge
+- [ ] Full integration with piHPSDR / DeskHPSDR
 
 ---
 
-## Requisitos
+## Requirements
 
 - Raspberry Pi Pico
-- Display gráfico compatível
-- Encoders rotativos com push
-- Botões físicos
-- PC rodando piHPSDR ou DeskHPSDR
-- Bridge TCI → MIDI no PC
+- Compatible graphic display
+- Rotary encoders with push
+- Physical buttons
+- PC running piHPSDR or DeskHPSDR
+- TCI → MIDI bridge on PC
